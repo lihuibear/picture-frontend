@@ -1,21 +1,26 @@
 <template>
-  <div id="basicLayout">
-    <a-layout style="min-height: 100vh">
-      <a-layout-header class="header">
-        <GlobalHeader />
-      </a-layout-header>
-      <a-layout-content class="content">
-        <router-view />
-      </a-layout-content>
-      <a-layout-footer class="footer">
-        <a href="https://lihuibear.cn" target="_blank"> 云图库 by lihui </a>
-      </a-layout-footer>
-    </a-layout>
-  </div>
+  <a-config-provider :locale="locale">
+    <div id="basicLayout">
+      <a-layout style="min-height: 100vh">
+        <a-layout-header class="header">
+          <GlobalHeader />
+        </a-layout-header>
+        <a-layout-content class="content">
+          <router-view />
+        </a-layout-content>
+        <a-layout-footer class="footer">
+          <a href="https://lihuibear.cn" target="_blank"> 云图库 by lihui </a>
+        </a-layout-footer>
+      </a-layout>
+    </div>
+  </a-config-provider>
 </template>
 
 <script setup lang="ts">
 import GlobalHeader from '@/components/GlobalHeader.vue'
+import zhCN from 'ant-design-vue/es/locale/zh_CN'
+
+const locale = zhCN
 </script>
 
 <style scoped>
