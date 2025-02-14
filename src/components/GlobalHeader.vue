@@ -26,6 +26,7 @@
             </ASpace>
             <template #overlay>
               <a-menu>
+                <a-menu-item @click="goUserInfoEdit"> 个人中心 </a-menu-item>
                 <a-menu-item @click="doLogout">
                   <LogoutOutlined />
                   退出登录
@@ -78,6 +79,12 @@ const doLogout = async () => {
     message.error('退出登录失败，' + res.data.message)
   }
 }
+
+// 跳转到用户编辑页面
+const goUserInfoEdit = () => {
+  router.push('/user/userinfo')
+}
+
 // 菜单列表
 const originItems = [
   {
@@ -103,7 +110,7 @@ const filterMenus = (menus = [] as MenuProps['items']) => {
   return menus?.filter((menu) => {
     if (menu.key.startsWith('/admin')) {
       const loginUser = loginUserStore.loginUser
-      if (!loginUser || loginUser.userRole !== "admin") {
+      if (!loginUser || loginUser.userRole !== 'admin') {
         return false
       }
     }
