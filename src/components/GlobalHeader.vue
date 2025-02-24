@@ -28,6 +28,12 @@
               </a-space>
               <template #overlay>
                 <a-menu>
+                  <a-menu-item>
+                    <router-link to="/my_space">
+                      <UserOutlined />
+                      我的空间
+                    </router-link>
+                  </a-menu-item>
                   <a-menu-item @click="goUserInfoEdit">
                     <UserOutlined />
                     个人中心
@@ -89,6 +95,11 @@ const originItems = [
     key: 'others',
     label: h('a', { href: 'https://lihuibear.cn', target: '_blank' }, '个人主页'),
     title: '个人主页',
+  },
+  {
+    key: '/admin/spaceManage',
+    label: '空间管理',
+    title: '空间管理',
   },
 ]
 
