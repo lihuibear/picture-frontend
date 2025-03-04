@@ -15,16 +15,18 @@
     </a-layout-sider>
   </div>
 </template>
+
 <script lang="ts" setup>
-import { h, ref } from 'vue'
+import { computed, h, ref } from 'vue'
 import { PictureOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
+import { MenuProps } from 'ant-design-vue'
 
 const loginUserStore = useLoginUserStore()
 
-// 菜单项
-const menuItems = [
+// 未经过滤的菜单项
+const originMenuItems = [
   {
     key: '/',
     icon: () => h(PictureOutlined),
@@ -35,7 +37,44 @@ const menuItems = [
     label: '我的空间',
     icon: () => h(UserOutlined),
   },
+  {
+    key: '/add_picture',
+    label: '创建图片',
+    title: '创建图片',
+  },
+  {
+    key: '/admin/userManage',
+    label: '用户管理',
+    title: '用户管理',
+  },
+  {
+    key: '/admin/pictureManage',
+    label: '图片管理',
+    title: '图片管理',
+  },
+  {
+    key: '/admin/spaceManage',
+    label: '空间管理',
+    title: '空间管理',
+  },
 ]
+
+// 根据权限过滤菜单项
+const filterMenus = (menus = [] as MenuProps['items']) => {
+  return menus?.filter((menu) => {
+    // 管理员才能看到 /admin 开头的菜单
+    if (menu?.key?.startsWith('/admin')) {
+      const loginUser = loginUserStore.loginUser
+      if (!loginUser || loginUser.userRole !== 'admin') {
+        return false
+      }
+    }
+    return true
+  })
+}
+
+// 展示在菜单的路由数组
+const menuItems = computed(() => filterMenus(originMenuItems))
 
 const router = useRouter()
 // 当前要高亮的菜单项

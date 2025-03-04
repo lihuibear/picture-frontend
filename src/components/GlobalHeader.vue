@@ -92,14 +92,14 @@ const originItems = [
     title: '图片管理',
   },
   {
-    key: 'others',
-    label: h('a', { href: 'https://lihuibear.cn', target: '_blank' }, '个人主页'),
-    title: '个人主页',
-  },
-  {
     key: '/admin/spaceManage',
     label: '空间管理',
     title: '空间管理',
+  },
+  {
+    key: 'others',
+    label: h('a', { href: 'https://lihuibear.cn', target: '_blank' }, '联系我'),
+    title: '联系我',
   },
 ]
 
