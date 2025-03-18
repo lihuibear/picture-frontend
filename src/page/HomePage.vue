@@ -53,9 +53,17 @@
                   <a-tag color="green">
                     {{ picture.category ?? '默认' }}
                   </a-tag>
-                  <a-tag v-for="tag in picture.tags" :key="tag">
+
+                  <a-tag
+                    v-for="tag in picture.tags.length <= 1
+                      ? picture.tags
+                      : picture.tags.slice(0, 1)"
+                    :key="tag"
+                  >
                     {{ tag }}
                   </a-tag>
+                  <a-tag v-if="picture.tags.length > 1"> ... </a-tag>
+
                   <a-button
                     style="margin-right: 8px"
                     type="primary"

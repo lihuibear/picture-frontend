@@ -7,7 +7,8 @@
         <img
           :alt="picture.name"
           :src="picture.thumbnailUrl ?? picture.url"
-          style="height: 180px; object-fit: cover"
+          style="height: 180px; object-fit: contain"
+          loading="lazy"
         />
       </template>
     </a-card>

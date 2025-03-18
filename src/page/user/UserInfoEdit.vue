@@ -111,7 +111,6 @@ const edit = () => {
 }
 
 const save = async () => {
-  // 检查是否有变化
   if (
     editableData.value.userName === loginUserStore.loginUser.userName &&
     editableData.value.userAccount === loginUserStore.loginUser.userAccount &&
@@ -124,14 +123,11 @@ const save = async () => {
   }
 
   try {
-    // 直接将整个 editableData 作为请求体传递
-    const response = await editUserUsingPost(
-      editableData.value, // 传递完整的用户信息（包括 id）
-    )
+    const response = await editUserUsingPost(editableData.value)
     if (response.data.code === 0) {
-      loginUserStore.setLoginUser(response.data.data)
       message.success('保存成功')
       isEditing.value = false
+      await fetchLoginUser() // 重新获取用户信息
     } else {
       message.error(`保存失败: ${response.data.message}`)
     }
@@ -140,6 +136,7 @@ const save = async () => {
     message.error('保存失败，请稍后重试')
   }
 }
+
 
 const cancel = () => {
   isEditing.value = false
