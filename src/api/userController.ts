@@ -135,6 +135,21 @@ export async function userRegisterUsingPost(
   })
 }
 
+/** updateRootUser POST /api/user/root/update */
+export async function updateRootUserUsingPost(
+  body: API.UserUpdateAdminRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/api/user/root/update', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** updateUser POST /api/user/update */
 export async function updateUserUsingPost(
   body: API.UserUpdateRequest,

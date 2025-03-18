@@ -25,19 +25,31 @@
           <a-image v-if="record.userAvatar" :src="record.userAvatar" :width="120" />
         </template>
         <template v-else-if="column.dataIndex === 'userRole'">
-          <div v-if="record.userRole === 'admin'">
-            <a-tag color="green">管理员</a-tag>
-          </div>
-          <div v-else>
-            <a-tag color="blue">普通用户</a-tag>
+          <div>
+            <a-tag v-if="record.userRole === 'su_admin'" color="red">超级管理员</a-tag>
+            <a-tag v-if="record.userRole === 'admin'" color="green">管理员</a-tag>
+            <a-tag v-if="record.userRole === 'user'" color="blue">普通用户</a-tag>
           </div>
         </template>
         <template v-if="column.dataIndex === 'createTime'">
           {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
-        <template v-else-if="column.key === 'action'">
+        <template v-if="record.userRole !== 'su_admin' && column.key === 'action'">
           <a-button danger @click="doDelete(record.id)">删除</a-button>
-          <a-button @click="editUser(record.id)">编辑</a-button>
+          <a-button
+            @click="editUser(record.id)"
+            :disabled="
+              loginUserStore.loginUser.userRole === 'admin' &&
+              record.userRole === 'admin' &&
+              loginUserStore.loginUser.id !== record.id
+            "
+          >
+            编辑
+          </a-button>
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <!-- 这里可以写当 userRole 是 su_admin 时的操作内容 -->
+          不可操作
         </template>
       </template>
     </a-table>
@@ -46,7 +58,7 @@
     <a-modal
       v-model:visible="isEditModalVisible"
       title="编辑用户"
-      @ok="submitEdit"
+      @ok="submitEditForm"
       @cancel="cancelEdit"
     >
       <a-form :model="editForm" :label-col="{ span: 5 }" :wrapper-col="{ span: 15 }">
@@ -59,14 +71,21 @@
         <a-form-item label="简介">
           <a-textarea v-model:value="editForm.userProfile" placeholder="请输入用户简介" />
         </a-form-item>
-        <a-form-item label="角色">
-          <a-select v-model:value="editForm.userRole">
+        <a-form-item
+          label="角色"
+          v-if="loginUserStore.loginUser.userRole !== 'user' && !isEditingSelf"
+        >
+          <a-select
+            v-model:value="editForm.userRole"
+            :disabled="loginUserStore.loginUser.userRole !== 'su_admin' && editForm.userRole === 'admin'"
+          >
             <a-select-option value="admin">管理员</a-select-option>
             <a-select-option value="user">普通用户</a-select-option>
           </a-select>
         </a-form-item>
       </a-form>
     </a-modal>
+
   </div>
 </template>
 
@@ -75,11 +94,13 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import {
   deleteUserUsingPost,
   listUserVoByPageUsingPost,
-  updateUserUsingPost,
+  updateRootUserUsingPost, updateUserUsingPost
 } from '@/api/userController.ts'
 import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
+import { useLoginUserStore } from '@/stores/useLoginUserStore.ts'
 
+const loginUserStore = useLoginUserStore()
 const isEditModalVisible = ref(false)
 const editForm = ref({
   id: '',
@@ -103,22 +124,65 @@ const editUser = (id: string) => {
   }
 }
 
-const submitEdit = async () => {
+const submitEditForm = async () => {
   try {
-    const res = await updateUserUsingPost(editForm.value)
+    const apiMethod =
+      loginUserStore.loginUser.userRole === "superAdmin" ? updateRootUserUsingPost : updateUserUsingPost;
+
+    const res = await apiMethod(editForm.value);
+
     if (res.data.code === 0) {
-      message.success('用户信息更新成功')
-      isEditModalVisible.value = false
-      fetchData()
+      message.success("用户信息更新成功");
+      isEditModalVisible.value = false;
+      fetchData();
     } else {
-      message.error('更新失败：' + res.data.message)
+      message.error("更新失败：" + res.data.message);
     }
   } catch (error) {
-    message.error('请求失败，请检查网络连接或稍后再试')
-    console.error(error)
+    console.error(error);
+    message.error(
+      "请求失败，请检查网络连接或稍后再试：" +
+      (error.response?.data?.message || error.message)
+    );
   }
-}
+};
 
+
+// const submitEdit = async () => {
+//   try {
+//     const res = await updateUserUsingPost(editForm.value)
+//     if (res.data.code === 0) {
+//       message.success('用户信息更新成功')
+//       isEditModalVisible.value = false
+//       fetchData()
+//     } else {
+//       message.error('更新失败：' + res.data.message)
+//     }
+//   } catch (error) {
+//     message.error('请求失败，请检查网络连接或稍后再试')
+//     console.error(error)
+//   }
+// }
+//
+// const submitAdminEdit = async () => {
+//   try {
+//     const res = await updateRootUserUsingPost(editForm.value)
+//     if (res.data.code === 0) {
+//       message.success('用户信息更新成功')
+//       isEditModalVisible.value = false
+//       fetchData()
+//     } else {
+//       message.error('更新失败：' + res.data.message)
+//     }
+//   } catch (error) {
+//     message.error('请求失败，请检查网络连接或稍后再试')
+//     console.error(error)
+//   }
+// }
+
+const isEditingSelf = computed(() => {
+  return editForm.id === loginUserStore.loginUser.id
+})
 const cancelEdit = () => {
   isEditModalVisible.value = false
   editForm.value = {

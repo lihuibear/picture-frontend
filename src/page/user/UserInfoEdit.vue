@@ -86,6 +86,8 @@ const displayUserRole = computed(() => {
     return '用户'
   } else if (userRole === 'admin') {
     return '管理员'
+  } else if (userRole === 'su_admin') {
+    return '超级管理员'
   }
   return userRole || '暂无信息'
 })
@@ -136,7 +138,6 @@ const save = async () => {
     message.error('保存失败，请稍后重试')
   }
 }
-
 
 const cancel = () => {
   isEditing.value = false

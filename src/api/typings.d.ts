@@ -704,6 +704,14 @@ declare namespace API {
     userPassword?: string
   }
 
+  type UserUpdateAdminRequest = {
+    id?: number
+    userAvatar?: string
+    userName?: string
+    userProfile?: string
+    userRole?: string
+  }
+
   type UserUpdateRequest = {
     id?: number
     userAvatar?: string

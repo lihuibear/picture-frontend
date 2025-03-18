@@ -109,7 +109,7 @@ const filterMenus = (menus = [] as MenuProps['items']) => {
     // 管理员才能看到 /admin 开头的菜单
     if (menu?.key?.startsWith('/admin')) {
       const loginUser = loginUserStore.loginUser
-      if (!loginUser || loginUser.userRole !== 'admin') {
+      if (!loginUser || (loginUser.userRole!== 'su_admin' && loginUser.userRole!== 'admin')) {
         return false
       }
     }
