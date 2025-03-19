@@ -252,6 +252,11 @@ declare namespace API {
     userRole?: string
   }
 
+  type mailUsingGETParams = {
+    /** targetEmail */
+    targetEmail: string
+  }
+
   type Output = {
     taskId?: string
     taskStatus?: string
@@ -660,6 +665,7 @@ declare namespace API {
     updateTime?: string
     userAccount?: string
     userAvatar?: string
+    userEmail?: string
     userName?: string
     userPassword?: string
     userProfile?: string
@@ -701,7 +707,9 @@ declare namespace API {
   type UserRegisterRequest = {
     checkPassword?: string
     userAccount?: string
+    userEmail?: string
     userPassword?: string
+    verifyCode?: string
   }
 
   type UserUpdateAdminRequest = {
