@@ -42,6 +42,12 @@
         </span>
       </div>
       <div class="user-info-item">
+        <span class="label">用户邮箱:</span>
+        <span class="value">
+          {{ loginUserStore.loginUser.userEmail || '暂无信息' }}
+        </span>
+      </div>
+      <div class="user-info-item">
         <span class="label">用户简介:</span>
         <span class="value">
           <a-input
@@ -99,6 +105,7 @@ const editableData = ref({
   userAccount: '',
   userProfile: '',
   userAvatar: '',
+  userEmail:''
 })
 
 const edit = () => {
@@ -109,6 +116,7 @@ const edit = () => {
     userAccount: loginUserStore.loginUser.userAccount || '',
     userProfile: loginUserStore.loginUser.userProfile || '',
     userAvatar: loginUserStore.loginUser.userAvatar || '',
+    userEmail: loginUserStore.loginUser.userEmail || '',
   }
 }
 
