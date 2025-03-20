@@ -47,6 +47,7 @@ export const SPACE_ROLE_ENUM = {
   VIEWER: "viewer",
   EDITOR: "editor",
   ADMIN: "admin",
+  SU_ADMIN: "su_admin",
 } as const;
 
 // 空间角色文本映射
@@ -54,6 +55,7 @@ export const SPACE_ROLE_MAP: Record<string, string> = {
   viewer: "浏览者",
   editor: "编辑者",
   admin: "管理员",
+  su_admin: "超级管理员",
 };
 
 // 空间角色选项映射

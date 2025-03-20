@@ -247,6 +247,7 @@ declare namespace API {
     updateTime?: string
     userAccount?: string
     userAvatar?: string
+    userEmail?: string
     userName?: string
     userProfile?: string
     userRole?: string
@@ -733,6 +734,7 @@ declare namespace API {
     id?: number
     userAccount?: string
     userAvatar?: string
+    userEmail?: string
     userName?: string
     userProfile?: string
     userRole?: string
