@@ -32,7 +32,7 @@
       </a-col>
       <!-- 空间使用排行分析 -->
       <a-col :xs="24" :md="12">
-        <SpaceRankAnalyze v-if="isAdmin" :spaceId="spaceId" :queryAll="queryAll" :queryPublic="queryPublic" />
+        <SpaceRankAnalyze v-if="isAdmin || isSUAdmin" :spaceId="spaceId" :queryAll="queryAll" :queryPublic="queryPublic" />
       </a-col>
     </a-row>
   </div>
@@ -71,6 +71,9 @@ const loginUserStore = useLoginUserStore()
 const loginUser = loginUserStore.loginUser
 const isAdmin = computed(() => {
   return loginUser.userRole === 'admin'
+})
+const isSUAdmin = computed(() => {
+  return loginUser.userRole === 'su_admin'
 })
 </script>
 
